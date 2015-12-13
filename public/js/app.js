@@ -7,6 +7,9 @@ require(['_config'], function (config) {
         // We make our own dust-to-AMD bridge because the built-in one in
         // dust 2.7.2 is funky and communicates via the cache.
         dust.onLoad = function(name, cb) {
+            if (name.indexOf('templates/') !== 0) {
+                name = 'templates/' + name + '.dust';
+            }
             require([name], function (tmpl) {
                 cb(null, tmpl);
             });
