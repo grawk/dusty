@@ -1,0 +1,4 @@
+{@useContent bundle="inc/innerExample.properties"}
+<h3>{@message key="text"/}</h3>
+
+{/useContent}

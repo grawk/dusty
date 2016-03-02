@@ -3,28 +3,29 @@
 
     "express": {
         "view cache": false,
-        "view engine": "js",
-        "views": "path:./.build/templates"
+        "view engine": "dust",
+        "views": "path:./public/templates"
     },
 
 
 
     "view engines": {
-        "js": {
-            "module": "engine-munger",
+        "dust": {
+            "module": "makara",
             "renderer": {
-                "method": "js",
+                "method": "dust",
                 "arguments": [
-                    { "cache": true },
-                    {
-                        "views": "config:express.views",
-                        "view engine": "config:express.view engine",
-                        "specialization": "config:specialization",
-                        "i18n": "config:i18n"
-                    }
+                    { "cache": true, "helpers": "config:dust.helpers" }
                 ]
             }
         }
+    },
+
+    "dust": {
+        "helpers": [
+
+            "dust-makara-helpers"
+        ]
     },
 
 
@@ -41,11 +42,17 @@
     "middleware": {
 
 
-        "expressView": {
+        "makara": {
             "priority": 100,
             "enabled": true,
             "module": {
-                "name": "engine-munger/lib/expressView"
+                "name": "makara",
+                "arguments": [
+                    {
+                        "i18n": "config:i18n",
+                        "specialization": "config:specialization"
+                    }
+                ]
             }
         },
         "locale": {
@@ -53,7 +60,14 @@
             "enabled": true,
             "module": "path:./lib/locale"
         },
-
+        "makaraAMDify": {
+            "priority": 119,
+            "enabled": true,
+            "module": {
+                "name": "makara-amdify",
+                "method": "middleware"
+            }
+        },
         "static": {
             "module": {
                 "arguments": [ "path:./.build" ]
